@@ -2,9 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "./trpc/router";
+import { PrismaClient } from "@prisma/client";
+
+dotenv.config();
 
 const app = express();
-dotenv.config();
+const prisma = new PrismaClient();
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -18,8 +21,28 @@ app.use(
   })
 );
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log("Database URL:", process.env.DATABASE_URL);
+// Example route to fetch tasks
+app.get("/tasks", async (req, res) => {
+  const tasks = await prisma.task.findMany();
+  res.json(tasks);
 });
+
+// Start the server
+const PORT = 3000;
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+// Handle Prisma disconnection on server shutdown
+const shutdown = async () => {
+  console.log("Shutting down server...");
+  await prisma.$disconnect();
+  server.close(() => {
+    console.log("Server closed.");
+    process.exit(0);
+  });
+};
+
+// Listen for termination signals
+process.on("SIGINT", shutdown); // Handle Ctrl+C
+process.on("SIGTERM", shutdown); // Handle termination signal
