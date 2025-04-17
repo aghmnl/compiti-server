@@ -50,8 +50,9 @@ Follow these steps to install and run the application locally:
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- npm or yarn
+- Node.js (I use v22.14.0)
+- npm (I use 11.3.0)
+- typescript (I use 5.8.3)
 - SQLite or PostgreSQL (for the database)
 
 ### Steps

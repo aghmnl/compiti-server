@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "## Overview",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aghmnl/compiti-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aghmnl/compiti-server/issues"
+  },
+  "homepage": "https://github.com/aghmnl/compiti-server#readme",
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
