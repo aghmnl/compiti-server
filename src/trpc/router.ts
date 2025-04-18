@@ -8,18 +8,18 @@ export const appRouter = t.router({
   // Create a new task
   createTask: t.procedure.input(createTaskSchema).mutation(async ({ input, ctx }) => {
     const { title, description, status } = input;
-    const task = await ctx.prisma.task.create({
+    return await ctx.prisma.task.create({
       data: { title, description, status },
     });
-    return task;
   }),
 
-  // Fetch all tasks
+  // Fetch all tasks. No zod validation needed here
+  // since we are not taking any input
   getTasks: t.procedure.query(async ({ ctx }) => {
     return await ctx.prisma.task.findMany();
   }),
 
-  // Fetch a single task by ID
+  // Fetch a specific task by ID
   getTask: t.procedure.input(getTaskSchema).query(async ({ input, ctx }) => {
     const { id } = input;
     return await ctx.prisma.task.findUnique({ where: { id } });
