@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "./trpc/router";
+import { createContext } from "./trpc/context"; // Import the context
 import { PrismaClient } from "@prisma/client";
 
 dotenv.config();
@@ -17,7 +18,7 @@ app.use(
   "/trpc",
   trpcExpress.createExpressMiddleware({
     router: appRouter,
-    createContext: () => ({}),
+    createContext, // Use the context here
   })
 );
 
