@@ -21,7 +21,18 @@ app.use(
   })
 );
 
-// Example route to fetch tasks
+app.post("/tasks", async (req, res) => {
+  const { title, description, status } = req.body;
+  const task = await prisma.task.create({
+    data: {
+      title,
+      description,
+      status,
+    },
+  });
+  res.json(task);
+});
+
 app.get("/tasks", async (req, res) => {
   const tasks = await prisma.task.findMany();
   res.json(tasks);
