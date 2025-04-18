@@ -1,20 +1,18 @@
 import { initTRPC } from "@trpc/server";
 import { createTaskSchema, updateTaskSchema, deleteTaskSchema, getTaskSchema } from "./schemas/taskSchemas";
-import { createContext } from "./context"; // Import the context
+import { createContext } from "./context";
 
 const t = initTRPC.context<typeof createContext>().create();
 
 export const appRouter = t.router({
   // Create a new task
-  createTask: t.procedure
-    .input(createTaskSchema) // Validate input using Zod schema
-    .mutation(async ({ input, ctx }) => {
-      const { title, description, status } = input;
-      const task = await ctx.prisma.task.create({
-        data: { title, description, status },
-      });
-      return task;
-    }),
+  createTask: t.procedure.input(createTaskSchema).mutation(async ({ input, ctx }) => {
+    const { title, description, status } = input;
+    const task = await ctx.prisma.task.create({
+      data: { title, description, status },
+    });
+    return task;
+  }),
 
   // Fetch all tasks
   getTasks: t.procedure.query(async ({ ctx }) => {
@@ -22,31 +20,25 @@ export const appRouter = t.router({
   }),
 
   // Fetch a single task by ID
-  getTask: t.procedure
-    .input(getTaskSchema) // Validate input using Zod schema
-    .query(async ({ input, ctx }) => {
-      const { id } = input;
-      return await ctx.prisma.task.findUnique({ where: { id } });
-    }),
+  getTask: t.procedure.input(getTaskSchema).query(async ({ input, ctx }) => {
+    const { id } = input;
+    return await ctx.prisma.task.findUnique({ where: { id } });
+  }),
 
   // Update an existing task
-  updateTask: t.procedure
-    .input(updateTaskSchema) // Validate input using Zod schema
-    .mutation(async ({ input, ctx }) => {
-      const { id, title, description, status } = input;
-      return await ctx.prisma.task.update({
-        where: { id },
-        data: { title, description, status },
-      });
-    }),
+  updateTask: t.procedure.input(updateTaskSchema).mutation(async ({ input, ctx }) => {
+    const { id, title, description, status } = input;
+    return await ctx.prisma.task.update({
+      where: { id },
+      data: { title, description, status },
+    });
+  }),
 
   // Delete a task
-  deleteTask: t.procedure
-    .input(deleteTaskSchema) // Validate input using Zod schema
-    .mutation(async ({ input, ctx }) => {
-      const { id } = input;
-      return await ctx.prisma.task.delete({ where: { id } });
-    }),
+  deleteTask: t.procedure.input(deleteTaskSchema).mutation(async ({ input, ctx }) => {
+    const { id } = input;
+    return await ctx.prisma.task.delete({ where: { id } });
+  }),
 });
 
 // Export type definition of API

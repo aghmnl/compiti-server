@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "## Overview",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node dist/server.js",
     "dev": "ts-node-dev src/server.ts"
   },
   "repository": {
