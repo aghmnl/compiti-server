@@ -4,7 +4,7 @@ export const taskSchema = z.object({
   id: z.number().optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
-  status: z.enum(["pending", "in progress", "done"]),
+  status: z.enum(["pending", "in_progress", "done"]),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
 });
