@@ -1,26 +1,26 @@
 import { z } from "zod";
 
-// Schema for creating a new task
-export const createTaskSchema = z.object({
+export const taskSchema = z.object({
+  id: z.number().optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
-  status: z.enum(["pending", "in progress", "done"]).default("pending"),
+  status: z.enum(["pending", "in_progress", "done"]),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
 
-// Schema for updating an existing task
-export const updateTaskSchema = z.object({
-  id: z.number().int().positive("Task ID must be a positive integer"),
-  title: z.string().min(1, "Title is required").optional(),
-  description: z.string().optional(),
-  status: z.enum(["pending", "in progress", "done"]).optional(),
+export const createTaskSchema = taskSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
-// Schema for deleting a task
+export const updateTaskSchema = taskSchema.partial();
+
 export const deleteTaskSchema = z.object({
   id: z.number().int().positive("Task ID must be a positive integer"),
 });
 
-// Schema for fetching a single task by ID
 export const getTaskSchema = z.object({
   id: z.number().int().positive("Task ID must be a positive integer"),
 });

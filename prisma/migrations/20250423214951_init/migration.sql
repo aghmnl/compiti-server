@@ -6,4 +6,7 @@ CREATE TABLE "Task" (
     "status" TEXT NOT NULL DEFAULT 'pending',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
+    CONSTRAINT "status_check" CHECK ("status" IN ('pending', 'in_progress', 'done'))
 );
+
+
