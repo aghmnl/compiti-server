@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const taskSchema = z.object({
-  id: z.number().optional(),
+  id: z.number(),
   title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
+  description: z.string().nullable(),
   status: z.enum(["pending", "in_progress", "done"]),
-  createdAt: z.string().optional(),
-  updatedAt: z.string().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 });
 
 export const createTaskSchema = taskSchema.omit({
@@ -24,3 +24,6 @@ export const deleteTaskSchema = z.object({
 export const getTaskSchema = z.object({
   id: z.number().int().positive("Task ID must be a positive integer"),
 });
+
+// Export the Task type
+export type Task = z.infer<typeof taskSchema>;

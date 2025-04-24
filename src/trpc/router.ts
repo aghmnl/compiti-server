@@ -1,5 +1,5 @@
 import { initTRPC } from "@trpc/server";
-import { createTaskSchema, updateTaskSchema, deleteTaskSchema, getTaskSchema } from "./schemas/taskSchemas";
+import { createTaskSchema, updateTaskSchema, deleteTaskSchema, getTaskSchema, taskSchema } from "./schemas/taskSchemas";
 import { createContext } from "./context";
 
 const t = initTRPC.context<typeof createContext>().create();
@@ -16,7 +16,16 @@ export const appRouter = t.router({
   // Fetch all tasks. No zod validation needed here
   // since we are not taking any input
   getTasks: t.procedure.query(async ({ ctx }) => {
-    return await ctx.prisma.task.findMany();
+    const tasks = await ctx.prisma.task.findMany();
+
+    // Convert Date fields to strings
+    const formattedTasks = tasks.map((task) => ({
+      ...task,
+      createdAt: task.createdAt.toISOString(),
+      updatedAt: task.updatedAt.toISOString(),
+    }));
+
+    return taskSchema.array().parse(formattedTasks); // Validate and enforce strict typing
   }),
 
   // Fetch a specific task by ID
