@@ -25,5 +25,6 @@ export const getTaskSchema = z.object({
   id: z.number().int().positive("Task ID must be a positive integer"),
 });
 
-// Export the Task type
 export type Task = z.infer<typeof taskSchema>;
+export type CreateTaskInput = z.infer<typeof createTaskSchema>;
+export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
