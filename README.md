@@ -11,26 +11,27 @@ This repository contains the **Server Side** of a simple **Task Management Appli
 
 The **Client Side** of this application is available in the following repository:  
 [https://github.com/aghmnl/compiti-client](https://github.com/aghmnl/compiti-client)
-
 The server is implemented using the following technologies:
 
-- **tRPC** for communication between the backend and frontend.
-- **Prisma** (ORM with SQLite or PostgreSQL) for database management.
-- **Zod** for schema validation on both client and server.
+- **tRPC:** For building type-safe APIs easily consumed by the client.
+- **Prisma:** ORM for database interaction (compatible with SQLite, PostgreSQL, etc.).
+- **Zod:** For schema definition and validation, ensuring data integrity and shared types with the client.
+- **Clerk:** For handling authentication and protecting API routes.
 
 ## Features
 
-The server includes the following functionalities:
+The server provides the following API functionalities via tRPC:
 
-1. Create a new task.
-2. View the list of tasks.
-3. Edit an existing task.
-4. Delete a task.
-5. Server-side validation using Zod.
+1.  **Create Task:** Add a new task to the database.
+2.  **Get Tasks:** Retrieve the list of all tasks for the authenticated user.
+3.  **Update Task:** Modify an existing task's details (title, description, status).
+4.  **Delete Task:** Remove a task from the database.
+5.  **Authentication Middleware:** Ensures only authenticated users can access task operations.
+6.  **Input Validation:** Uses Zod schemas (shared with the client) to validate incoming data.
 
 ## Documentation Used
 
-The following official documentation was used during the development process:
+The following official documentation was referenced during development:
 
 - [tRPC Documentation](https://trpc.io/docs)
 - [Prisma Documentation](https://www.prisma.io/docs)
@@ -40,65 +41,89 @@ The following official documentation was used during the development process:
 
 This repository fulfills the following objectives:
 
-- Implements a modular structure for API routes and validations.
-- Follows best practices for code organization (e.g., separation of API route handlers and validations).
-- Provides a fully functional backend for the CRUD application.
+- Implements a fully functional backend API for the Task Management CRUD application.
+- Utilizes tRPC for efficient and type-safe client-server communication.
+- Integrates Prisma for database operations.
+- Secures endpoints using Clerk authentication.
+- Demonstrates code sharing (types/schemas) with the client via a local dependency setup.
+- Follows best practices for code organization (e.g., separating routers, procedures, context).
 
 ## Installation and Local Setup
 
-Follow these steps to install and run the application locally:
+Follow these steps to install and run the server application locally. **Remember the required folder structure mentioned in the Overview.**
 
 ### Prerequisites
 
-- Node.js (I use v22.14.0)
-- npm (I use 11.3.0)
-- typescript (I use 5.8.3)
-- SQLite or PostgreSQL (for the database)
+- Node.js (v16 or higher recommended, matching the client)
+- npm
 
 ### Steps
 
-1. **Clone the repository**
+1.  **Clone both repositories** into the same parent directory:
 
-   ```bash
-   git clone https://github.com/aghmnl/compiti-server
-   cd <repository-folder>
-   ```
+    ```bash
+    # Navigate to your desired parent directory
+    cd path/to/your/ParentFolder
 
-2. **Install dependencies**
+    # Clone the server (this repo)
+    git clone https://github.com/aghmnl/compiti-server
 
-   ```bash
+    # Clone the client
+    git clone https://github.com/aghmnl/compiti-client
+
+    # Navigate into the server directory
+    cd compiti-server
+    ```
+
+2.  **Install server dependencies**
+
+    ```bash
     npm install
-   ```
+    ```
 
-3. **Set up environment variables**
+    > (Note: The client will install this server repo as a dependency separately using `npm install ../compiti-server` from its own directory).
 
-- Create a .env file in the root directory.
-- Add the following variables:
+3.  **Set up environment variables**
+
+- Create a `.env` file in the root of the `compiti-server` directory.
+- Add the following variables, replacing placeholder values with your actual configuration:
+
+  ```plaintext
+  # Your database connection string for SQLite
+  DATABASE_URL="file:./dev.db"
+
+  # Specify the port and the url of the server
+  PORT="4000"
+  SERVER_URL="http://localhost:4000"
   ```
-  DATABASE_URL="your-database-url"
-  ```
 
-4. **Set up the database**
+4.  **Set up the database**
 
-- Run Prisma migrations to create the database schema:
+- Run Prisma migrations to create the database schema based on `prisma/schema.prisma`:
 
   ```bash
-  npx prisma migrate dev
+  npx prisma migrate dev --name init
   ```
 
-5. **Run the development server**
+  _(This will also generate the Prisma Client)_
 
-   ```bash
-   npm run dev
-   ```
+5.  **Run the development server**
 
-6. **Access the application**
+    ```bash
+    npm run dev
+    # or
+    # yarn dev
+    ```
 
-- Open your browser and navigate to http://localhost:3000.
+6.  **Server is Running**
+
+- The server should now be running on `http://localhost:4000`.
+- It listens for requests from the client application (running on `http://localhost:3000`). You generally won't interact with the server directly via your browser, but through the client UI.
+- You can test the server using `Postmant`, `Insomnia` or any other similar tool.
 
 ## Contributing
 
-Feel free to fork this repository and submit pull requests for improvements or bug fixes.
+Feel free to fork this repository and submit pull requests for improvements or bug fixes. Ensure any changes consider the dependency relationship with the `compiti-client` repository.
 
 ## License
 
