@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient(); // Prisma is a singleton, so we create it once
+const prisma = new PrismaClient();
 
 export const createContext = () => {
   return { prisma };

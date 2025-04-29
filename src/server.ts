@@ -9,16 +9,14 @@ dotenv.config();
 
 const app = express();
 
-// Enable CORS for requests from the frontend
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.SERVER_URL,
     methods: ["GET", "POST"],
     credentials: true,
   })
 );
 
-// tRPC middleware
 app.use(
   "/trpc",
   trpcExpress.createExpressMiddleware({
@@ -27,13 +25,10 @@ app.use(
   })
 );
 
-// Start the server
-const PORT = 4000;
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+const server = app.listen(process.env.PORT, () => {
+  console.log(`Server is running on ${process.env.SERVER_URL}`);
 });
 
-// Handle Prisma disconnection on server shutdown
 const shutdown = async () => {
   console.log("Shutting down server...");
   await disconnectPrisma();
@@ -43,6 +38,5 @@ const shutdown = async () => {
   });
 };
 
-// Listen for termination signals
 process.on("SIGINT", shutdown); // Handle Ctrl+C
 process.on("SIGTERM", shutdown); // Handle termination signal
