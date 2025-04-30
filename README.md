@@ -94,28 +94,20 @@ Follow these steps to install and run the server application locally. **Remember
 
   # Specify the port and the url of the server
   PORT="4000"
-  SERVER_URL="http://localhost:4000"
+  SERVER_URL=`http://localhost:${PORT}`
+  CLIENT_URL="http://localhost:3000"
+
+  # The client URL is needed for CORS (Cross-Origin Resource Sharing).
+  # Otherwise the the browser will block the requests from the client.
   ```
 
-4.  **Set up the database**
-
-- Run Prisma migrations to create the database schema based on `prisma/schema.prisma`:
-
-  ```bash
-  npx prisma migrate dev --name init
-  ```
-
-  _(This will also generate the Prisma Client)_
-
-5.  **Run the development server**
+4.  **Run the development server**
 
     ```bash
     npm run dev
-    # or
-    # yarn dev
     ```
 
-6.  **Server is Running**
+5.  **Server is Running**
 
 - The server should now be running on `http://localhost:4000`.
 - It listens for requests from the client application (running on `http://localhost:3000`). You generally won't interact with the server directly via your browser, but through the client UI.
